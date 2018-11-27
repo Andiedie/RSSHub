@@ -81,6 +81,7 @@ app.use(router.routes()).use(router.allowedMethods());
 // static files
 app.use(koaRange);
 app.use(staticFile);
+require('./clearExpireFile');
 app.use(
     koaStatic(path.join(__dirname, 'static'), {
         maxage: 24 * 60 * 60 * 1000,
