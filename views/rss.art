@@ -7,7 +7,7 @@
     <channel>
         <title><![CDATA[{{@ title || 'RSSHub' }}]]></title>
         <link>{{ link || 'https://github.com/DIYgod/RSSHub' }}</link>
-        <description><![CDATA[{{@ description || title }} - Made with love by RSSHub(https://github.com/DIYgod/RSSHub)]]></description>
+        <description><![CDATA[{{@ description || title }}]]></description>
         <generator>RSSHub</generator>
         <webMaster>i@diygod.me</webMaster>
         {{ if itunes_author }}<itunes:author>{{ itunes_author}}</itunes:author>{{ /if }}
