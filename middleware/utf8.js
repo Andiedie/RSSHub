@@ -2,5 +2,8 @@
 // https://stackoverflow.com/questions/1497885/remove-control-characters-from-php-string/1497928#1497928
 module.exports = async (ctx, next) => {
     await next();
-    ctx.body = typeof ctx.body !== 'object' ? ctx.body.replace(/[\x00-\x1F\x7F]/g, '') : ctx.body;
+    if (!ctx.body) {
+        return;
+    }
+    ctx.body = typeof ctx.body === 'string' ? ctx.body.replace(/[\x00-\x1F\x7F]/g, '') : ctx.body;
 };

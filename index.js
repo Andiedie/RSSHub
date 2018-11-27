@@ -6,8 +6,7 @@ const logger = require('./utils/logger');
 const onerror = require('./middleware/onerror');
 const header = require('./middleware/header');
 const utf8 = require('./middleware/utf8');
-const memoryCache = require('./middleware/lru-cache');
-const redisCache = require('./middleware/redis-cache');
+const cache = require('./utils/cache');
 const parameter = require('./middleware/parameter');
 const template = require('./middleware/template');
 const favicon = require('koa-favicon');
@@ -15,14 +14,17 @@ const debug = require('./middleware/debug');
 const accessControl = require('./middleware/access-control');
 
 const router = require('./router');
-const protected_router = require('./protected_router');
-const mount = require('koa-mount');
+// const protected_router = require('./protected_router');
+// const mount = require('koa-mount');
+const staticFile = require('./staticFile');
+const koaStatic = require('koa-static');
+const koaRange = require('koa-range');
+const path = require('path');
 
 // API related
-
-const apiTemplate = require('./middleware/api-template');
-const api_router = require('./api_router');
-const apiResponseHandler = require('./middleware/api-response-handler');
+// const apiTemplate = require('./middleware/api-template');
+// const api_router = require('./api_router');
+// const apiResponseHandler = require('./middleware/api-response-handler');
 
 process.on('uncaughtException', (e) => {
     logger.error('uncaughtException: ' + e);
@@ -56,8 +58,8 @@ app.use(debug);
 // 5 fix incorrect `utf-8` characters
 app.use(utf8);
 
-app.use(apiTemplate);
-app.use(apiResponseHandler());
+// app.use(apiTemplate);
+// app.use(apiResponseHandler());
 
 // 4 generate body
 app.use(template);
@@ -65,64 +67,25 @@ app.use(template);
 app.use(parameter);
 
 // 2 cache
-if (config.cacheType === 'memory') {
-    app.use(
-        memoryCache({
-            app: app,
-            expire: config.cacheExpire,
-            ignoreQuery: true,
-        })
-    );
-} else if (config.cacheType === 'redis') {
-    app.use(
-        redisCache({
-            app: app,
-            expire: config.cacheExpire,
-            ignoreQuery: true,
-            redis: config.redis,
-            onerror: (e) => {
-                logger.error('Redis error: ', e);
-            },
-            onconnect: () => {
-                logger.info('Redis connected.');
-            },
-        })
-    );
-} else {
-    app.context.cache = {
-        get: () => null,
-        set: () => null,
-    };
-}
-app.context.cache.tryGet = async function(key, getValueFunc, maxAge = 24 * 60 * 60) {
-    let v = await this.get(key);
-    if (!v) {
-        v = await getValueFunc();
-        this.set(key, v, maxAge);
-    } else {
-        let parsed;
-        try {
-            parsed = JSON.parse(v);
-        } catch (e) {
-            parsed = null;
-        }
-        if (parsed) {
-            v = parsed;
-        }
-    }
-
-    return v;
-};
+cache(app);
 
 // router
-
-app.use(mount('/', router.routes())).use(router.allowedMethods());
+app.use(router.routes()).use(router.allowedMethods());
 
 // routes the require authentication
-app.use(mount('/protected', protected_router.routes())).use(protected_router.allowedMethods());
+// app.use(mount('/protected', protected_router.routes())).use(protected_router.allowedMethods());
 
 // API router
-app.use(mount('/api', api_router.routes())).use(api_router.allowedMethods());
+// app.use(mount('/api', api_router.routes())).use(api_router.allowedMethods());
+
+// static files
+app.use(koaRange);
+app.use(staticFile);
+app.use(koaStatic(path.join(__dirname, 'static'), {
+    maxage: 24 * 60 * 60 * 1000,
+    hidden: false,
+    gzip: false
+}));
 
 // connect
 if (config.connect.disabled) {
