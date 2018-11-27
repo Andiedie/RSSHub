@@ -81,11 +81,13 @@ app.use(router.routes()).use(router.allowedMethods());
 // static files
 app.use(koaRange);
 app.use(staticFile);
-app.use(koaStatic(path.join(__dirname, 'static'), {
-    maxage: 24 * 60 * 60 * 1000,
-    hidden: false,
-    gzip: false
-}));
+app.use(
+    koaStatic(path.join(__dirname, 'static'), {
+        maxage: 24 * 60 * 60 * 1000,
+        hidden: false,
+        gzip: false,
+    })
+);
 
 // connect
 if (config.connect.disabled) {
