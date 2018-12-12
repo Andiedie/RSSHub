@@ -11,7 +11,7 @@ module.exports = async (ctx) => {
         let img = '';
         item.extended_entities &&
             item.extended_entities.media.forEach((item) => {
-                img += `<br>${item.type === 'video' ? 'Video: ' : ''}<img referrerpolicy="no-referrer" src="${item.media_url_https}">`;
+                img += `<br>${item.type === 'video' ? 'Video: ' : ''}<img referrerpolicy="no-referrer" src="https://feed.andiedie.cn/${item.media_url_https}">`;
             });
 
         return img;
