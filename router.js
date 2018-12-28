@@ -297,7 +297,7 @@ if (config.telegram && config.telegram.token) {
 }
 
 // readhub
-router.get('/readhub/category/:category', require('./routes/readhub/category'));
+router.get('/readhub/', require('./routes/readhub/index'));
 
 // GitHub
 if (config.github && config.github.access_token) {

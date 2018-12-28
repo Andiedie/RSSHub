@@ -50,6 +50,6 @@
         "no-trailing-spaces": 1,
         "no-control-regex": 0,
         "prettier/prettier": 0,
-        "no-await-in-loop": 1
+        "no-await-in-loop": 0
     }
 }
