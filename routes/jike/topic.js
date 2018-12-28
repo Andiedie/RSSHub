@@ -49,7 +49,7 @@ module.exports = async (ctx) => {
                     const texts = upper.find('span.text').map((_, ele) => $(ele).text());
                     let description = '';
                     for (let i = 0; i < links.length; i++) {
-                        description += `${i + 1}、<a href="${links[i]}">${texts[i]}</a>`;
+                        description += `${i + 1}、<a href="${links[i]}">${texts[i]}</a><br/>`;
                     }
                     if (description) {
                         item.description = description;
