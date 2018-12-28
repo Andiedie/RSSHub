@@ -1,4 +1,4 @@
-const request = require('../../utils/request');
+const request = require('request');
 
 module.exports = async (ctx) => {
     const id = ctx.params.id;

@@ -24,9 +24,6 @@ module.exports = async (ctx) => {
 
         return url;
     };
-    console.log('-------------');
-    console.log(id);
-    console.log('-------------');
     const result = await T.get('statuses/user_timeline', {
         screen_name: id,
         tweet_mode: 'extended',

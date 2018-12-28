@@ -1,3 +1,4 @@
+require('./utils/request');
 const config = require('./config');
 const Koa = require('koa');
 const fs = require('fs');
