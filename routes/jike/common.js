@@ -1,5 +1,3 @@
-const url = require('url');
-
 module.exports = {
     emptyResponseCheck: (ctx, data) => {
         if (data.length === 0) {
@@ -29,7 +27,7 @@ module.exports = {
                     link = `https://m.okjike.com/questions/${item.id}`;
                     break;
                 default:
-                    content = '未知类型，请前往GitHub提交issue';
+                    content = '未知类型，请前往 GitHub 提交 issue';
                     link = 'https://github.com/DIYgod/RSSHub/issues';
             }
 
@@ -38,12 +36,6 @@ module.exports = {
 
             if (item.linkInfo) {
                 const linkUrl = item.linkInfo.originalLinkUrl || item.linkInfo.linkUrl;
-
-                // 对于即刻抓取的微信公众号文章 特殊处理
-                // 此时 Rss原文链接 变为 微信公众号链接
-                if (url.parse(linkUrl).host === 'mp.weixin.qq.com') {
-                    link = linkUrl;
-                }
 
                 // 1. 音频
                 const audioObject = item.linkInfo.audio || item.audio;

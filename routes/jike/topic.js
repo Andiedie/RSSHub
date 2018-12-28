@@ -1,5 +1,6 @@
 const axios = require('../../utils/axios');
 const common = require('./common');
+const cheerio = require('cheerio');
 
 module.exports = async (ctx) => {
     const id = ctx.params.id;
@@ -26,10 +27,36 @@ module.exports = async (ctx) => {
 
     const topic = data[0].topic;
     ctx.state.data = {
-        title: `${topic.content} - 即刻主题精选`,
+        title: `${topic.content}`,
         link: `https://web.okjike.com/topic/${id}/official`,
         description: topic.content,
         image: topic.squarePicture.picUrl || topic.squarePicture.middlePicUrl || topic.squarePicture.thumbnailUrl,
-        item: common.topicDataHanding(data),
+        item: common.topicDataHanding(data, ctx),
     };
+    if (id === '553870e8e4b0cafb0a1bef68' || id === '55963702e4b0d84d2c30ce6f') {
+        for (const item of ctx.state.data.item) {
+            const regResult = /https:\/\/www.okjike.com\/medium\/[a-zA-Z0-9]*/.exec(item.description);
+            if (regResult) {
+                const newsUrl = regResult[0];
+                const cache = ctx.cache.get(newsUrl);
+                if (cache) {
+                    item.description = cache;
+                } else {
+                    const { data } = await axios.get(newsUrl);
+                    const $ = cheerio.load(data);
+                    const upper = $('ul.main > li.item');
+                    const links = upper.find('a').map((_, ele) => $(ele).attr('href'));
+                    const texts = upper.find('span.text').map((_, ele) => $(ele).text());
+                    let description = '';
+                    for (let i = 0; i < links.length; i++) {
+                        description += `${i + 1}、<a href="${links[i]}">${texts[i]}</a>`;
+                    }
+                    if (description) {
+                        item.description = description;
+                        ctx.cache.set(newsUrl, description);
+                    }
+                }
+            }
+        }
+    }
 };

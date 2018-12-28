@@ -27,10 +27,10 @@ module.exports = async (ctx) => {
     const topic = data[0].topic;
 
     ctx.state.data = {
-        title: `${topic.content} - 即刻主题广场`,
+        title: `${topic.content}`,
         link: `https://web.okjike.com/topic/${id}/user`,
         description: topic.content,
         image: topic.squarePicture.picUrl || topic.squarePicture.middlePicUrl || topic.squarePicture.thumbnailUrl,
-        item: common.topicDataHanding(data),
+        item: common.topicDataHanding(data, ctx),
     };
 };

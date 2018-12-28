@@ -21,18 +21,18 @@ module.exports = async (ctx) => {
         if (data.newsArray) {
             description += '<br/><br/>媒体报道：';
             for (const one of data.newsArray) {
-                description += `<br/>${one.siteName}: <a href='https://readhub.cn/topic/${one.id}'>${one.title}</a> ${dayjs(new Date(one.publishDate)).format('YYYY-MM-DD HH:mm')}`;
+                description += `<br/>${one.siteName}: <a href='https://readhub.cn/topic/${one.id}'>${one.title}</a> <span style="color:#CCC">${dayjs(new Date(one.publishDate)).format('YYYY-MM-DD HH:mm')}</span>`;
             }
         }
         if (data.timeline && data.timeline.topics) {
             description += '<br/><br/>相关事件：';
             for (const one of data.timeline.topics) {
-                description += `<br/><a href='https://readhub.cn/topic/${one.id}'>${one.title}</a> ${dayjs(new Date(one.createdAt)).format('YYYY-MM-DD HH:mm')}`;
+                description += `<br/><a href='https://readhub.cn/topic/${one.id}'>${one.title}</a> <span style="color:#CCC">${dayjs(new Date(one.createdAt)).format('YYYY-MM-DD HH:mm')}</span>`;
             }
         }
         const item = {
             title: data.title,
-            description,
+            description: description.replace(new RegExp('\n', 'g'), '<br/>'),
             pubDate: data.publishDate,
             guid: id,
             link,
