@@ -30,10 +30,10 @@ module.exports = {
         api_key: process.env.DISQUS_API_KEY,
     },
     twitter: {
-        consumer_key: process.env.TWITTER_CONSUMER_KEY,
-        consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-        access_token: process.env.TWITTER_ACCESS_TOKEN,
-        access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
+        consumer_key: 'seITDT5BkGXh7Z5n5EEdUNOfU',
+        consumer_secret: 'ip4Xd6Ys4ojer17ZiCG9MS2RlYVo8pClNlxzmNyJ7suRRfqbUD',
+        access_token: '2980753832-VVq4275h9NxNWSirvd5kc4jhwIjFMPQlUQonvbx',
+        access_token_secret: 'OxenQNyM9PDVcwVRdWrmOKNHxWUud5yHJgikAiH8j8GR7',
     },
     youtube: {
         key: process.env.YOUTUBE_KEY,

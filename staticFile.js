@@ -13,7 +13,6 @@ module.exports = async (ctx, next) => {
     if (ctx.status !== 404) {
         return;
     }
-    console.log('run');
     const response = request.get(resourceUrl);
     response.pipe(
         fs.createWriteStream(path.resolve(__dirname, 'static', filename), {

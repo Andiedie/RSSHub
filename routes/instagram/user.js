@@ -26,14 +26,14 @@ module.exports = async (ctx) => {
                 ];
             } else if (item.__typename === 'GraphSidecar') {
                 const response = await request.getAsync(url);
-                const data = JSON.parse(response.body.match(/<script type="text\/javascript">window._sharedData = (.*);<\/script>/)[1]) || {};
+                const data = JSON.parse(response.body.match(/window._sharedData = (.*);/)[1]) || {};
                 resource = data.entry_data.PostPage[0].graphql.shortcode_media.edge_sidecar_to_children.edges.map((item) => ({
                     image: item.node.display_url,
                     video: item.node.video_url,
                 }));
             } else if (item.__typename === 'GraphVideo') {
                 const response = await request.getAsync(url);
-                const data = JSON.parse(response.body.match(/<script type="text\/javascript">window._sharedData = (.*);<\/script>/)[1]) || {};
+                const data = JSON.parse(response.body.match(/window._sharedData = (.*);/)[1]) || {};
                 resource = [
                     {
                         image: data.entry_data.PostPage[0].graphql.shortcode_media.display_url,
