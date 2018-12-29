@@ -12,22 +12,22 @@ module.exports = async (ctx) => {
             items.push(cache);
             continue;
         }
-        const link = `https://readhub.cn/topic/${id}`;
-        const res = await axios.get(link);
-        const {
-            topicDetail: { data },
-        } = JSON.parse(/window\.__INITIAL_STATE__ = (.*?);/.exec(res.data)[1]);
+        const { data } = await axios.get(`https://api.readhub.cn/topic/${id}`);
         let description = data.summary;
         if (data.newsArray) {
             description += '<br/><br/>媒体报道：';
             for (const one of data.newsArray) {
-                description += `<br/>${one.siteName}: <a href='https://readhub.cn/topic/${one.id}'>${one.title}</a> <span style="color:#CCC">${dayjs(new Date(one.publishDate)).format('YYYY-MM-DD HH:mm')}</span>`;
+                description += `<br/>${dayjs(new Date(one.publishDate)).format('YY-MM-DD')} ${one.siteName}: <a href='${one.mobileUrl || one.url}'>${one.title}</a>`;
             }
         }
         if (data.timeline && data.timeline.topics) {
-            description += '<br/><br/>相关事件：';
+            let type = '相关事件';
+            if (data.timeline.commonEntities && data.timeline.commonEntities.length > 0) {
+                type = '事件追踪';
+            }
+            description += `<br/><br/>${type}：`;
             for (const one of data.timeline.topics) {
-                description += `<br/><a href='https://readhub.cn/topic/${one.id}'>${one.title}</a> <span style="color:#CCC">${dayjs(new Date(one.createdAt)).format('YYYY-MM-DD HH:mm')}</span>`;
+                description += `<br/>${dayjs(new Date(one.createdAt)).format('YY-MM-DD')} <a href='https://readhub.cn/topic/${one.id}'>${one.title}</a>`;
             }
         }
         const item = {
@@ -35,7 +35,7 @@ module.exports = async (ctx) => {
             description: description.replace(new RegExp('\n', 'g'), '<br/>'),
             pubDate: data.publishDate,
             guid: id,
-            link,
+            link: `https://readhub.cn/topic/${id}`,
         };
         items.push(item);
         ctx.cache.set(id, item);
