@@ -1,4 +1,4 @@
-const request = require('./utils/request');
+const request = require('request');
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
