@@ -1,9 +1,9 @@
-const request = require('request');
+const request = require('request-promise');
 
 module.exports = async (ctx) => {
     const id = ctx.params.id;
 
-    const response = await request.getAsync(`https://www.instagram.com/${id}/`);
+    const response = await request.get(`https://www.instagram.com/${id}/`);
 
     const data = JSON.parse(response.body.match(/<script type="text\/javascript">window._sharedData = (.*);<\/script>/)[1]) || {};
     const list = data.entry_data.ProfilePage[0].graphql.user.edge_owner_to_timeline_media.edges;
@@ -25,14 +25,14 @@ module.exports = async (ctx) => {
                     },
                 ];
             } else if (item.__typename === 'GraphSidecar') {
-                const response = await request.getAsync(url);
+                const response = await request.get(url);
                 const data = JSON.parse(response.body.match(/window._sharedData = (.*);/)[1]) || {};
                 resource = data.entry_data.PostPage[0].graphql.shortcode_media.edge_sidecar_to_children.edges.map((item) => ({
                     image: item.node.display_url,
                     video: item.node.video_url,
                 }));
             } else if (item.__typename === 'GraphVideo') {
-                const response = await request.getAsync(url);
+                const response = await request.get(url);
                 const data = JSON.parse(response.body.match(/window._sharedData = (.*);/)[1]) || {};
                 resource = [
                     {

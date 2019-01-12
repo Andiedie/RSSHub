@@ -72,6 +72,7 @@
     "readall": "1.1.0",
     "redis": "2.8.0",
     "request": "^2.88.0",
+    "request-promise": "^4.2.2",
     "rss-parser": "3.5.4",
     "sharp": "^0.21.0",
     "twit": "2.2.11",

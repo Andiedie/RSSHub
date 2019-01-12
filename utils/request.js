@@ -1,14 +1,17 @@
 const request = require('request');
-const util = require('util');
+const rp = require('request-promise');
 const config = require('../config');
 
-const instance = request.defaults({
+require.cache[require.resolve('request')].exports = request.defaults({
     headers: {
         'User-Agent': config.ua,
     },
     proxy: 'http://localhost:1087',
 });
-instance.getAsync = util.promisify(request.get);
-instance.postAsync = util.promisify(request.post);
 
-require.cache[require.resolve('request')].exports = instance;
+require.cache[require.resolve('request-promise')].exports = rp.defaults({
+    headers: {
+        'User-Agent': config.ua,
+    },
+    proxy: 'http://localhost:1087',
+});
