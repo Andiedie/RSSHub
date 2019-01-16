@@ -11,15 +11,14 @@ module.exports = async (ctx) => {
 
     ctx.state.data = {
         title: data.mediaInfo.title,
-        link: `https://bangumi.bilibili.com/anime/${seasonid}/`,
+        link: `https://www.bilibili.com/bangumi/media/md${data.mediaInfo.id}/`,
         description: data.mediaInfo.evaluate,
         item:
             data.epList &&
             data.epList.reverse().map((item) => ({
-                title: `第${item.index}话 ${item.index_title}`,
-                description: `更新时间：${item.pub_real_time}<img referrerpolicy="no-referrer" src="${item.cover}">`,
-                pubDate: new Date(item.pub_real_time).toUTCString(),
-                link: `https://www.bilibili.com/bangumi/play/ep${item.ep_id}`,
+                title: `${item.titleFormat} ${item.longTitle}`,
+                description: `<img referrerpolicy="no-referrer" src="${item.cover}">`,
+                link: `https://www.bilibili.com/bangumi/play/ep${item.id}`,
             })),
     };
 };
