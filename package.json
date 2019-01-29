@@ -73,9 +73,11 @@
     "raven": "^2.6.4",
     "readall": "1.1.0",
     "redis": "2.8.0",
+    "request": "^2.88.0",
     "rss-parser": "3.6.2",
     "sharp": "^0.21.0",
     "socks-proxy-agent": "^4.0.1",
+    "tunnel": "^0.0.6",
     "twit": "2.2.11",
     "winston": "3.2.0"
   },
